@@ -1,164 +1,245 @@
-NetworkSim: 3D Epidemic Simulator
+# Disease Network Simulator
 
-NetworkSim is a high-fidelity, interactive epidemic simulation platform. It bridges network science, stochastic SIR dynamics, and cinematic 3D rendering to visualize how contagions propagate through complex social graphs. Built with efficiency in mind, it allows for real-time interaction with large-scale population datasets directly in the browser.
+Disease Network Simulator is a high-fidelity, interactive epidemic simulation platform that integrates **network science**, **stochastic SIR dynamics**, and **real-time 3D visualization**.  
+It enables users to explore how infectious diseases propagate through complex social networks using an efficient, browser-based simulation pipeline.
 
-Table of Contents
+The platform is designed for scalability, analytical clarity, and reproducibility, supporting large populations, multiple network topologies, and synchronized visual and statistical analysis.
 
-Core Features
+---
 
-System Variability & Parameters
+## Table of Contents
 
-System Architecture
+- [Core Features](#core-features)
+- [System Variability and Parameters](#system-variability-and-parameters)
+- [System Architecture](#system-architecture)
+- [Technical Highlights](#technical-highlights)
+- [Installation and Setup](#installation-and-setup)
+- [Running the Application](#running-the-application)
+- [Usage Guide](#usage-guide)
+- [Project Structure](#project-structure)
+- [Extending the Model](#extending-the-model)
+- [Potential Improvements](#potential-improvements)
+- [Technology Stack](#technology-stack)
 
-Technical Highlights
+---
 
-Installation
+## Core Features
 
-Usage Guide
+### Flexible Network Topologies
+NetworkSim supports the generation of synthetic social networks using widely studied graph models:
 
-Project Structure
+- **Erdos–Rényi Random Graphs**
+- **Watts–Strogatz Small-World Networks**
+- **Barabási–Albert Scale-Free Networks**
 
-Extending the Model
+Each topology exposes tunable parameters such as rewiring probability, node degree, and edge attachment rate.
 
-Core Features
+---
 
-Flexible Network Topologies: Generate synthetic social structures using Erdős-Rényi, Watts-Strogatz, or Barabási-Albert models with tunable parameters (rewiring probability $p$, edges $m$, neighbors $k$).
+### High-Performance SIR Simulation Engine
+- Discrete-time stochastic SIR model
+- Set-based state tracking for constant-time lookups
+- Full per-node state history recorded at every timestep
+- Deterministic playback without recomputation
 
-High-Performance SIR Engine: A set-based simulation core optimized for large graphs, recording full node-state history for precise playback without recalculation.
+---
 
-Cinematic 3D Visualization: An immersive Three.js renderer featuring:
+### Real-Time 3D Visualization
+A WebGL-based renderer built on **Three.js**, featuring:
 
-Instanced mesh rendering for thousands of nodes.
+- Instanced mesh rendering for thousands of agents
+- Force-directed (spring) layouts for structural clarity
+- Interactive node inspection and neighbor highlighting
+- Heads-up display for live statistics and playback controls
 
-Dynamic neighbor highlighting (golden threads) on interaction.
+---
 
-Force-directed layouts (Spring) for structural clarity.
+### Interactive Analytics
+- Real-time **Susceptible–Infected–Recovered (SIR)** curves
+- Plotly-based dynamic charts
+- Full synchronization with simulation timeline
 
-Live HUD statistics overlay.
+---
 
-Interactive Analytics: Integrated Plotly charts for tracking Susceptible, Infected, and Recovered (S-I-R) trajectories over time.
+### Temporal Playback and Analysis
+- Play, pause, replay, and speed control
+- Timeline scrubbing through recorded simulation history
+- Enables post-hoc analysis of outbreak phases
 
-Time-Travel Control: Full playback control (Play, Pause, Replay, Speed Slider) to analyze specific moments of the outbreak.
+---
 
-System Variability & Parameters
+## System Variability and Parameters
 
-NetworkSim is designed to explore the complex dynamics of disease spread by allowing users to tweak fundamental epidemiological and structural parameters in real-time. This variability allows for the simulation of diverse scenarios, from rapid flu-like outbreaks to slow-burning contagions.
+NetworkSim allows real-time exploration of epidemiological and structural parameters.
 
-Population Size ($N$): Scale the simulation from small communities (100 nodes) to town-sized networks (3000+ nodes) to observe how population density impacts spread.
+### Population Size (N)
+Scales from small communities (≈100 agents) to large networks (3000+ agents), enabling density and scale analysis.
 
-Infection Spread Rate ($\beta$): Control the transmission probability per contact. Adjusting this parameter allows the system to model pathogens with varying levels of contagiousness (e.g., highly infectious Measles vs. less transmissible viruses).
+### Infection Rate (β)
+Controls the probability of transmission per contact, allowing modeling of pathogens with varying contagiousness.
 
-Recovery Rate ($\gamma$): Define the probability of an infected individual recovering in a given time step. This directly influences the duration of the infectious period.
+### Recovery Rate (γ)
+Defines the probability of recovery per timestep, directly influencing infectious period duration.
 
-Simulation Duration (Days): Set the temporal scope of the simulation to capture short-term outbreak spikes or long-term endemic behaviors.
+### Simulation Duration
+Configurable number of simulated days to observe short-term outbreaks or long-term endemic behavior.
 
-Initial Outbreak Size: Configure the number of "Patient Zeros" to seed the infection, allowing analysis of how outbreak origins affect containment.
+### Initial Outbreak Size
+Controls the number of initially infected individuals (patient zero seeding).
 
-System Architecture
+---
 
-The application follows a modular architecture separating simulation logic from the presentation layer.
+## System Architecture
 
-1. Frontend & Orchestration (main_app.py)
+The application follows a modular architecture separating simulation logic, visualization, and orchestration.
 
-Streamlit manages the application state, caches expensive topology generations, and embeds the 3D visualization via custom HTML components.
+### 1. Frontend and Orchestration
+**`main_app.py`**
+- Streamlit-based user interface
+- Application state management
+- Caching of expensive graph generation
+- Embedding of WebGL visualization via custom HTML components
 
-2. Simulation Core (backend/simulation/)
+---
 
-Generator: Creates graph topologies and assigns spatial coordinates using NetworkX.
+### 2. Simulation Core (`backend/simulation/`)
+- **network_generator.py**  
+  Generates graph topologies and assigns spatial coordinates using NetworkX.
 
-Simulator: Manages the stochastic transition between states (S -> I -> R). It utilizes efficient set operations for $O(1)$ lookup times during infection steps.
+- **disease_model.py**  
+  Encapsulates epidemiological parameters (β, γ).
 
-Model: Encapsulates disease parameters (infection rate $\beta$, recovery rate $\gamma$).
+- **simulator.py**  
+  Executes stochastic S → I → R transitions using efficient set operations.
 
-3. Visualization Layer (visualization/)
+---
 
-Three.js Renderer: A Python wrapper that generates complex HTML/JS to render the scene using WebGL. It handles the "Cinematic Replay" by consuming the simulation history.
+### 3. Visualization Layer (`visualization/`)
+- **threejs_renderer.py**  
+  Generates Three.js scenes and handles cinematic replay.
 
-Analytics: Plotly integration for aggregate epidemiological curves.
+- **analytics_plotter.py**  
+  Produces real-time SIR plots using Plotly.
 
-Technical Highlights
+- **color_map.py**  
+  Centralized visual state consistency utilities.
 
-Synthetic City Modeling: Nodes are assigned abstract spatial coordinates to emulate "clusters" and "communities" realistic to human contact graphs.
+---
 
-Instanced Rendering: Utilizes Three.js InstancedMesh to render high node counts (2000+) at 60 FPS, avoiding the performance bottlenecks of standard DOM-based visualizations.
+## Technical Highlights
 
-Full-History Capture: The simulation loop records snapshots of every node's state at every timestep, enabling the frontend to "scrub" through the timeline instantly.
+- **Synthetic City Modeling**  
+  Abstract spatial clustering emulates realistic social communities.
 
-Reactive Data Flow: Changes in simulation parameters trigger optimized re-runs, updating both the 3D scene and the 2D charts in sync.
+- **Instanced Rendering**  
+  Efficient GPU-based rendering enables smooth interaction at high node counts.
 
-Installation
+- **Full-History Capture**  
+  Enables instant timeline scrubbing without re-running simulations.
 
-Clone the repository
+- **Reactive Data Flow**  
+  Parameter changes trigger optimized re-simulation with synchronized visual and analytical updates.
 
-git clone [https://github.com/yourusername/networksim.git](https://github.com/yourusername/networksim.git)
+---
+
+## Installation and Setup
+
+### Prerequisites
+- Python **3.9 or higher**
+- pip package manager
+- A modern web browser with WebGL support
+
+---
+
+### Clone the Repository
+```bash
+git clone[ https://github.com/yourusername/networksim.git](https://github.com/shaheer-shehri/Disease-Network-Simulator)
 cd networksim
-
-
-Set up a virtual environment (Recommended)
-
+```
+. Create a Virtual Environment (Recommended)
 python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
 
 
-Install dependencies
+Activate:
 
-pip install -r requirements.txt
+Windows:
 
+    venv\Scripts\activate
 
-Run the application
+macOS / Linux:
 
-streamlit run main_app.py
+    source venv/bin/activate
 
+Install Dependencies
+    pip install -r requirements.txt
 
-Usage Guide
+Run the Application
+    streamlit run main_app.py
 
-Configuration (Sidebar):
+###Usage Guide
+ Configuration (Sidebar)
 
-Population: Set the number of nodes (agents).
+Population Size
 
-Disease Model: Adjust Infection Rate ($p_{inf}$) and Recovery Rate ($p_{rec}$).
+Infection Rate (β)
 
-Topology: Choose the graph algorithm and tune its specific parameters (e.g., Randomness for Small-World).
+Recovery Rate (γ)
 
-Execution:
+Network Topology & Parameters
 
-Click START to run the backend simulation.
+###Execution
 
-Interaction:
+Click START to run the simulation backend.
 
-3D View: Left-click nodes to highlight connections (golden threads) and view metadata. Right-click/Drag to pan and rotate.
+###Interaction
 
-Playback: Use the HUD controls inside the 3D view to Pause or change simulation speed.
+Left-click nodes to highlight neighbors
 
-Analysis: Observe the real-time S-I-R curves updating below the visualizer.
+Right-click / Drag to rotate and pan
 
-Project Structure
+HUD Controls for playback & speed
 
+###Analysis
+
+Monitor live S-I-R curves updating in real time beneath the 3D visualizer.
+
+---
+
+##Project Structure
 NetworkSim/
-├── main_app.py                  # Entry point (Streamlit UI)
-├── requirements.txt             # Project dependencies
+├── main_app.py
+├── requirements.txt
 ├── backend/
 │   └── simulation/
-│       ├── __init__.py
-│       ├── network_generator.py # Graph topology & spatial logic
-│       ├── disease_model.py     # Infection probability logic
-│       └── simulator.py         # Core time-step engine
+│       ├── network_generator.py
+│       ├── disease_model.py
+│       └── simulator.py
 └── visualization/
-    ├── __init__.py
-    ├── threejs_renderer.py      # WebGL generation logic
-    ├── analytics_plotter.py     # Plotly charting functions
-    └── color_map.py             # Visual consistency utils
+    ├── threejs_renderer.py
+    ├── analytics_plotter.py
+    └── color_map.py
 
+##Extending the Model
 
-Extending the Model
+Disease Dynamics
+Implement SEIR, SIS, or custom compartment models.
 
-Disease Dynamics: Modify simulation/disease_model.py to implement SEIR (Exposed) or SIS (Re-infection) models.
+Visual Channels
+Map node size, glow, or color to centrality or vaccination status.
 
-Visual Channels: Update visualization/threejs_renderer.py to map node size or glow intensity to other metrics (e.g., centrality or vaccination status).
+Data Export
+Export simulation history to CSV for offline analysis in Jupyter.
 
-Data Export: Use pandas in main_app.py to export the sim.stats_history to CSV for offline analysis in Jupyter Notebooks.
+##Technology Stack
 
-Built with Python, Streamlit, and NetworkX.
+Python
+
+Streamlit
+
+NetworkX
+
+Three.js
+
+Plotly
+
+WebGL
