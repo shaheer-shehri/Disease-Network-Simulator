@@ -207,17 +207,28 @@ Monitor live S-I-R curves updating in real time beneath the 3D visualizer.
 
 ##Project Structure
 NetworkSim/
+
 ├── main_app.py
+
 ├── requirements.txt
+
 ├── backend/
+
 │   └── simulation/
+
 │       ├── network_generator.py
+
 │       ├── disease_model.py
+
 │       └── simulator.py
+
 └── visualization/
-    ├── threejs_renderer.py
-    ├── analytics_plotter.py
-    └── color_map.py
+
+|    ├── threejs_renderer.py
+    
+|    ├── analytics_plotter.py
+    
+|    └── color_map.py
 
 ##Extending the Model
 
