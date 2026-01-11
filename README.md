@@ -1,4 +1,4 @@
-NetworkSim: 3D Epidemic Simulator
+# NetworkSim: 3D Epidemic Simulator
 
 NetworkSim is a high-fidelity, interactive epidemic simulation platform. It bridges network science, stochastic SIR dynamics, and cinematic 3D rendering to visualize how contagions propagate through complex social graphs. Built with efficiency in mind, it allows for real-time interaction with large-scale population datasets directly in the browser.
 
@@ -20,7 +20,7 @@ Project Structure
 
 Extending the Model
 
-Core Features
+##Core Features
 
 Flexible Network Topologies: Generate synthetic social structures using Erdős-Rényi, Watts-Strogatz, or Barabási-Albert models with tunable parameters (rewiring probability $p$, edges $m$, neighbors $k$).
 
@@ -40,7 +40,7 @@ Interactive Analytics: Integrated Plotly charts for tracking Susceptible, Infect
 
 Time-Travel Control: Full playback control (Play, Pause, Replay, Speed Slider) to analyze specific moments of the outbreak.
 
-System Parameters
+##System Parameters
 
 NetworkSim is designed to explore the complex dynamics of disease spread by allowing users to tweak fundamental epidemiological and structural parameters in real-time. This variability allows for the simulation of diverse scenarios, from rapid flu-like outbreaks to slow-burning contagions.
 
@@ -54,7 +54,7 @@ Simulation Duration (Days): Set the temporal scope of the simulation to capture 
 
 Initial Outbreak Size: Configure the number of "Patient Zeros" to seed the infection, allowing analysis of how outbreak origins affect containment.
 
-System Architecture
+##System Architecture
 
 The application follows a modular architecture separating simulation logic from the presentation layer.
 
@@ -76,7 +76,7 @@ Three.js Renderer: A Python wrapper that generates complex HTML/JS to render the
 
 Analytics: Plotly integration for aggregate epidemiological curves.
 
-Technical Highlights
+##Technical Highlights
 
 Synthetic City Modeling: Nodes are assigned abstract spatial coordinates to emulate "clusters" and "communities" realistic to human contact graphs.
 
@@ -117,7 +117,7 @@ streamlit run main_app.py
 
 
 
-Usage Guide
+##Usage Guide
 
 Configuration (Sidebar):
 
@@ -139,7 +139,7 @@ Playback: Use the HUD controls inside the 3D view to Pause or change simulation 
 
 Analysis: Observe the real-time S-I-R curves updating below the visualizer.
 
-Project Structure
+##Project Structure
 
 NetworkSim/
 ├── main_app.py                  # Entry point (Streamlit UI)
@@ -158,7 +158,7 @@ NetworkSim/
 
 
 
-Extending the Model
+##Extending the Model
 
 Disease Dynamics: Modify simulation/disease_model.py to implement SEIR (Exposed) or SIS (Re-infection) models.
 
